@@ -3,7 +3,11 @@ import Image from "next/image";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
-import { faCamera, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCamera,
+  faTrashAlt,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { useState, useEffect } from "react";
 
@@ -12,10 +16,20 @@ import user from "../public/user.png";
 export default function EditableQuestion({ index }) {
   let [question, setQuestion] = useState("Question here...");
   // let [choices, setChoices] = useState(["Answer...", "Answer...", "Answer...", "Answer..."])
-  let [choices, setChoices] = useState([0, 1, 2, 3]);
-  let [correct, setCorrect] = useState(0);
+  let [choices, setChoices] = useState([
+    { answer: "answer choice 1", correct: false },
+  ]);
   const [editAnswer, setEditAnswer] = useState(false);
-  const [answer, setAnswer] = useState("answer here...");
+
+  const setAnswer = (choice, idx) => {
+    choices[idx] = choice;
+    setChoices([...choices]);
+  };
+
+  const deleteAnswer = (idx) => {
+    choices.splice(idx, 1);
+    setChoices([...choices]);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center w-full mb-10">
@@ -38,7 +52,7 @@ export default function EditableQuestion({ index }) {
               "mt-2 shadow-lg w-full flex-grow bg-white rounded-md flex items-center justify-center"
             }
           >
-            <div className={"px-16 py-16 text-3xl w-full flex items-center"}>
+            <div className={"px-16 py-16 text-2xl w-full flex items-center"}>
               <span>{index + 1}. </span>
               <input
                 type="text"
@@ -66,17 +80,61 @@ export default function EditableQuestion({ index }) {
               "mt-2 shadow-lg w-full flex-grow bg-white rounded-md flex items-center justify-center"
             }
           >
-            <div className={"px-16 py-16 text-3xl w-full flex items-center"}>
-              <span>{index + 1}. </span>
-              <input
-                type="text"
-                value={answer}
-                onChange={(e) => {
-                  setAnswer(e.target.value);
-                }}
-                className="text-2xl flex-grow border-0 focus:border-0 focus:outline-none focus:ring-0"
-              />
+            <div
+              className={
+                "px-16 py-16 text-2xl w-full flex flex-col justify-center"
+              }
+            >
+              {choices.map((choice, idx) => (
+                <div className={"flex items-center"}>
+                  <span>{String.fromCharCode("A".charCodeAt(0) + idx)}. </span>
+                  <input
+                    autoFocus
+                    type="text"
+                    value={choice.answer}
+                    onChange={(e) => {
+                      setAnswer(
+                        { answer: e.target.value, correct: choice.correct },
+                        idx
+                      );
+                    }}
+                    className="text-2xl flex-grow border-0 focus:border-0 focus:outline-none focus:ring-0"
+                  />
+                  <button
+                    className={
+                      "text-base px-2 rounded-md " +
+                      (choice.correct
+                        ? "text-green-500 bg-green-100 hover:bg-green-200"
+                        : "text-red-500 bg-red-100 hover:bg-red-200")
+                    }
+                    onClick={() => {
+                      setAnswer(
+                        { answer: choice.answer, correct: !choice.correct },
+                        idx
+                      );
+                    }}
+                  >
+                    {choice.correct ? "Correct" : "Incorrect"}
+                  </button>
+                  <button onClick={() => deleteAnswer(idx)}>
+                    <FontAwesomeIcon
+                      icon={faTimes}
+                      className={
+                        "ml-4 w-5 h-5 text-gray-400 hover:text-red-600"
+                      }
+                    />
+                  </button>
+                </div>
+              ))}
             </div>
+            <button
+              className={"absolute right-4 bottom-4"}
+              onClick={() => {
+                setChoices([...choices, { answer: "", correct: false }]);
+              }}
+            >
+              Add answer
+            </button>
           </div>
         </div>
         {/* <FontAwesomeIcon icon={faTrashAlt} className="w-8" /> */}
