@@ -7,7 +7,7 @@ import Leaderboard from './leaderboard'
 export default function Preview({ }) {
 
     return (
-        <div style={{ width: "87.5vw", height: "85vh", backgroundColor: "#625771" }}>
+        <div style={{ width: "87.5vw", minHeight: "100vh", backgroundColor: "#625771" }}>
             <div style={{display: "flex",justifyContent: "space-around",position: "relative",top: "30px", marginTop:"10px"}}>
                 <div>
                     <h1 style={{position:"relative",color:"white", fontSize:"2.7rem"}}>Play a Set!</h1>
@@ -34,7 +34,7 @@ export default function Preview({ }) {
                 
             </div>            
 
-            <div style={{position: 'absolute', top: '60px', right:'0', width:'20vw',background: "#625771", height: "90vh"}}>    
+            <div style={{position: 'absolute', top: '60px', right:'0', width:'20vw',background: "#625771", minHeight: "100vh"}}>    
                 <div style={{position: 'relative',left:"30px", top:"30px",width:'16vw',padding:"5px",background: "rgba(66, 51, 69, 0.8)", borderRadius:"12px", border:"1px solid rgba(255, 255, 255, 0.125)"}}>
                     <h1 style={{color:"white", fontSize:"1.5rem", marginBottom:"20px", marginLeft:"10px"}}>Global Leaderboard</h1>
                     <div style={{display: "flex", justifyContent: "center", maxHeight: "65vh", overflowY:"scroll"}}>
