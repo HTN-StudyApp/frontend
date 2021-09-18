@@ -6,27 +6,15 @@ import Footer from '../components/footer'
 
 import { useState, useEffect } from 'react';
 import EditableQuestion from '../components/editableQuestion';
-import Test from '../components/test';
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
-import { faCamera, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 export default function Create() {
 
     let [setName, setSetName] = useState("Untitled Set");
-
-    let [questions, setQuestions] = useState([
-        { question: "Question here...", choices: [0, 1, 2, 3], answer: 0 }
-    ]);
-
-    const handleQuestionChange = (newQuestions) => {
-        setQuestions(newQuestions)
-        console.log("new!", questions)
-    }
-
-    // useEffect(() =>  console.log("effect", questions) , [questions])
+    let [questions, setQuestions] = useState(1);
 
     return (
         <div >
@@ -38,28 +26,22 @@ export default function Create() {
 
             <Header />
 
-            <main style={{ marginTop: "60px", minHeight: "100vh" }}>
+            <main style={{ marginTop: "60px", minHeight: "100vh" }}
+                className="flex flex-col items-center"
+            >
 
                 <input type="text" value={setName}
                     onChange={e => setSetName(e.currentTarget.value)}
                     className="focus:outline-none"></input>
 
-                {questions.map((question, index) => (
-                    <EditableQuestion key={`${question.question}`} question={question} index={index}
-                        allQuestions={questions}
-                        // updateQuestions={handleQuestionChange} /> 
-                        updateQuestions={handleQuestionChange} /> 
+                {new Array(questions).fill(0).map((x, i) => (
+                    <EditableQuestion key={`${i} ${questions}`} index={i} /> 
                 ))}
 
-                {/* {arr.map((e, i) => (
-                    <Test key={e} value={e} onChange={handleChange} values={values} index={i} />
-                ))}
-
-                {values.map(v => (
-                    <p key={v}>{v}</p>
-                ))}
-
-                <p>{values[1]}</p> */}
+                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-10"
+                    onClick={() => setQuestions(questions+1)}>
+                    <FontAwesomeIcon icon={faPlus} className="m-2"/>
+                </div>
 
             </main>
 
