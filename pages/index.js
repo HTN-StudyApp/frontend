@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import Header from '../components/header'
 import Footer from '../components/footer'
-import Preview from '../components/preview'
+import Preview from '../components/top-preview'
 
 export default function Index() {
   return (
@@ -11,14 +11,15 @@ export default function Index() {
       <Head>
         <title>Study App</title>
         <meta name="description" content="HTN Study App" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.png" />
       </Head>
 
       <Header />
 
-      <main >
+      <main>
         <Preview />
-        <h1>hi</h1>
+        {/* <h1>hello</h1> */}
+
       </main>
 
       <Footer />
