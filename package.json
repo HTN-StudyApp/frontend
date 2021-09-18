@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@csstools/normalize.css": "^12.0.0",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
     "next": "11.1.2",
     "react": "^17.0.2",
     "react-dom": "17.0.2"
