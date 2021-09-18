@@ -1,13 +1,13 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import Head from "next/head";
+import Image from "next/image";
 
-import Header from '../components/header'
-import Footer from '../components/footer'
-import Preview from '../components/main-preview'
+import Header from "../components/header";
+import Footer from "../components/footer";
+import Preview from "../components/main-preview";
 
 export default function Index() {
   return (
-    <div >
+    <div>
       <Head>
         <title>Study App</title>
         <meta name="description" content="HTN Study App" />
@@ -16,11 +16,11 @@ export default function Index() {
 
       <Header />
 
-      <main style={{ marginTop: "60px", minHeight: "100vh" }}>
+      <main style={{ marginTop: "60px", height: "85vh" }}>
         <Preview />
       </main>
 
       <Footer />
     </div>
-  )
+  );
 }
