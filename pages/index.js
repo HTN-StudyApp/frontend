@@ -16,7 +16,13 @@ export default function Index() {
 
       <Header />
 
-      <main >
+      <main style={{ marginTop: "60px" }}>
+        <Preview />
+        <Preview />
+        <Preview />
+        <Preview />
+        <Preview />
+        <Preview />
         <Preview />
         <h1>hi</h1>
       </main>
