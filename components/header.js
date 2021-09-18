@@ -6,9 +6,12 @@ import user from "../public/user.png";
 
 export default function Header({ isMobile, userid }) {
   return (
-    <div
-      style={{ height: isMobile ? "fit-content" : "60px" }}
-      className="w-full absolute top-0 text-white flex items-center justify-between bg-purple-800"
+    <nav
+      style={{
+        height: isMobile ? "fit-content" : "60px",
+        backgroundColor: "#423345",
+      }}
+      className="w-full absolute top-0 text-white flex items-center justify-between"
     >
       {/* logo */}
       <div className="flex items-center px-2">
@@ -19,7 +22,9 @@ export default function Header({ isMobile, userid }) {
           height={45}
           className="rounded-full"
         />
-        <h1 className="mx-2">StudyApp</h1>
+        <Link href="/">
+          <a className="mx-2">StudyApp</a>
+        </Link>
       </div>
 
       {/* user profile picture */}
@@ -32,6 +37,6 @@ export default function Header({ isMobile, userid }) {
           className="rounded-full"
         />
       </div>
-    </div>
+    </nav>
   );
 }
