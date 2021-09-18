@@ -1,4 +1,6 @@
-export default function set(){
+
+
+export default function Set(){
     return (
         <div>
             

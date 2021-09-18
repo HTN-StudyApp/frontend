@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Header from '../../components/header'
 import Footer from '../../components/footer'
 
+
 export default function Sets() {
     return (
         <div >
@@ -15,7 +16,7 @@ export default function Sets() {
 
             <Header />
 
-            <main >
+            <main style={{ marginTop: "60px", minHeight: "100vh" }}>
                 <h1>hi</h1>
             </main>
 
