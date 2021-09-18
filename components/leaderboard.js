@@ -5,6 +5,16 @@ export default function Leaderboard({ }){
     return(
         <div>
             <Profile/>
+            <Profile/>
+            <Profile/>
+            <Profile/>
+            <Profile/>
+            <Profile/>
+            <Profile/>
+            <Profile/>
+            <Profile/>
+            <Profile/>
+            <Profile/>
         </div>
     )
 }

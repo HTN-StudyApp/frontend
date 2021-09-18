@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import Header from '../components/header'
 import Footer from '../components/footer'
-import Preview from '../components/top-preview'
+import Preview from '../components/main-preview'
 
 export default function Index() {
   return (
@@ -17,12 +17,6 @@ export default function Index() {
       <Header />
 
       <main style={{ marginTop: "60px" }}>
-        <Preview />
-        <Preview />
-        <Preview />
-        <Preview />
-        <Preview />
-        <Preview />
         <Preview />
       </main>
 

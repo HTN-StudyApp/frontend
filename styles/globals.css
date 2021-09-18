@@ -4,6 +4,7 @@
 
 html,
 body {
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
   padding: 0;
@@ -23,17 +24,20 @@ a {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 6px;
+  height: 8px;
+  width: 8px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
+  border-radius: 10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
+  border-radius: 10px;
 }
 
 /* Handle on hover */
