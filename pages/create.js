@@ -29,18 +29,17 @@ export default function Create() {
             <main style={{ marginTop: "60px", minHeight: "100vh" }}
                 className="flex flex-col items-center"
             >
-
                 <input type="text" value={setName}
                     onChange={e => setSetName(e.currentTarget.value)}
-                    className="focus:outline-none"></input>
+                    className="focus:outline-none text-5xl w-3/4"></input>
 
                 {new Array(questions).fill(0).map((x, i) => (
-                    <EditableQuestion key={`${i} ${questions}`} index={i} /> 
+                    <EditableQuestion key={`${i} ${questions}`} index={i} />
                 ))}
 
                 <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-10"
-                    onClick={() => setQuestions(questions+1)}>
-                    <FontAwesomeIcon icon={faPlus} className="m-2"/>
+                    onClick={() => setQuestions(questions + 1)}>
+                    <FontAwesomeIcon icon={faPlus} className="m-2" />
                 </div>
 
             </main>
