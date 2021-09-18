@@ -10,7 +10,7 @@ export default function List({}) {
         marginRight: "25px",
         marginLeft: "5px",
       }}
-      className="rounded-lg bg-purple-700"
+      className="rounded-lg bg-purple-100 shadow-md hover:shadow-xl duration-300"
     ></div>
   );
 }

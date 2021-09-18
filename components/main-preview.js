@@ -27,11 +27,10 @@ export default function Preview({}) {
               type="text"
               placeholder="Enter a code..."
               style={{
-                borderRadius: "25px",
-                border: "2px solid #423345",
                 padding: "5px",
                 marginLeft: "10px",
               }}
+              className={"rounded-lg border-2 border-indigo-900"}
             ></input>
           </form>
         </div>

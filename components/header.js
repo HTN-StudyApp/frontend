@@ -9,9 +9,8 @@ export default function Header({ isMobile, userid }) {
     <nav
       style={{
         height: isMobile ? "fit-content" : "60px",
-        backgroundColor: "#423345",
       }}
-      className="w-full absolute top-0 text-white flex items-center justify-between"
+      className="bg-indigo-900 w-full absolute top-0 text-white flex items-center justify-between"
     >
       {/* logo */}
       <div className="flex items-center px-2">
