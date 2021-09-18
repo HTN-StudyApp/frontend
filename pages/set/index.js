@@ -10,7 +10,7 @@ export default function Sets() {
             <Head>
                 <title>Study App</title>
                 <meta name="description" content="HTN Study App" />
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/logo.png" />
             </Head>
 
             <Header />

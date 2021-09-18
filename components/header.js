@@ -24,6 +24,4 @@ export default function Header({ isMobile, userid }) {
             </div>
         </div>
     )
-
-
 }
