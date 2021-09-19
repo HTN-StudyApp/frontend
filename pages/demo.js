@@ -1,9 +1,27 @@
+import { useState } from 'react'
+
+import useUser from '../lib/useUser'
+import postData, { server } from '../lib/postData'
+
 import Header from '../components/header'
 import Footer from '../components/footer'
 
 import PlaneSketch from '../sketches/planeSketch';
 
 function Demo({ setData }) {
+
+    const { user, loading, signInWithGoogle, logout } = useUser();
+
+    const [open, setOpen] = useState(false)
+    const [finalPoints, setFinalPoints] = useState(0)
+
+    function onFinish(points) {
+        setOpen(true)
+        
+        let { email } = user;
+        postData(`${server}/api/db/add-points`, { email, points, finishedSet: 'ycmo92wzr' })
+        setFinalPoints(points)
+    }
 
     // let questions = [
     //     {
@@ -27,20 +45,19 @@ function Demo({ setData }) {
         <div style={{ overflowX: "hidden" }}>
             <Header />
             <main style={{ marginTop: "60px", minHeight: "90vh" }}>
+
+                {open && <div
+                    className="w-full h-full absolute isolate z-50 flex justify-center items-center">
+                    <div className="rounded-lg bg-white w-3/4 h-1/2 flex flex-col justify-center items-center">
+                        <h1 className="font-bold text-4xl">Congrats, {user.displayName}!</h1>
+                        <br />
+                        <p className="text-2xl">You just finished <b>{setData.name}</b> and got <b>{finalPoints} points!</b></p>
+                    </div>
+                </div>}
                 {/* <button onClick={() => {
 
                     postData('http://localhost:3000/api/db/add-set', {
                         email: "ongzz@gmail.com", name: "Mock Set", publicSet: true, questions: [
-                            {
-                                question: "Color of the sky?",
-                                choices: ["yellow", "blue", "red", "green"],
-                                correct: 1
-                            },
-                            {
-                                question: "Color of the sky?",
-                                choices: ["yellow", "blue", "red", "green"],
-                                correct: 1
-                            },
                             {
                                 question: "Color of the sky?",
                                 choices: ["yellow", "blue", "red", "green"],
@@ -52,37 +69,15 @@ function Demo({ setData }) {
                             console.log(data); // JSON data parsed by `data.json()` call
                         });
                 }}>test add set</button> */}
-                <PlaneSketch questions={setData.questions} />
+                <PlaneSketch questions={setData.questions} onFinish={onFinish} />
             </main>
             <Footer />
         </div>
     );
 };
 
-// Example POST method implementation:
-async function postData(url = '', data = {}) {
-    // Default options are marked with *
-    const response = await fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
-}
-
 
 Demo.getInitialProps = async (ctx) => {
-    const dev = process.env.NODE_ENV !== 'production';
-    const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
-
     const res = await fetch(`${server}/api/db/get-set/ycmo92wzr`)
     const json = await res.json()
     console.log(json)

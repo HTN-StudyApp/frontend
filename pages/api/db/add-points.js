@@ -35,7 +35,7 @@ export default async (req, res) => {
 
             // Process a POST request
             // res.status(200).json({ "msg": `congrats i set the id as ${id}`, id });
-            res.status(200)
+            res.status(200).json({ "msg": `congrats dude ${email} i gave u ${points}` })
             return;
         }
 

@@ -2,14 +2,22 @@ import dynamic from 'next/dynamic';
 import React from 'react';
 import useWindowSize from '../lib/useWindowSize'
 
+import { server } from '../lib/postData';
+
 const Sketch = dynamic(import('react-p5'), {
     loading: () => <p>Loading...</p>,
     ssr: false,
 });
 
-export default function PlaneSketch({ questions }) {
+export default function PlaneSketch({ questions, onFinish }) {
+
+    function handleFinish(points) {
+        onFinish(points)
+    }
+
     let questionsDone = 0;
     let chosenAnswers = [];
+    let points = 0;
 
     let time = 0;
 
@@ -26,8 +34,8 @@ export default function PlaneSketch({ questions }) {
         blast beam + reveal colors (correct = red, others = green)
         enemy fly past
     */
-    let flyInTime = 2000;
-    let answerTime = 2000;
+    let flyInTime = 1000;
+    let answerTime = 5000;
     let blastTime = 1000;
     let flyOutTime = 2000;
     let totalTime = flyInTime + answerTime + blastTime + flyOutTime;
@@ -48,8 +56,8 @@ export default function PlaneSketch({ questions }) {
     let plane;
     let explosion
     const preload = (p5) => {
-        plane = p5.loadImage('../assets/plane.png')
-        explosion = p5.loadImage("../assets/explosion.png")
+        plane = p5.loadImage(`${server}/assets/plane.png`)
+        explosion = p5.loadImage(`${server}/assets/explosion.png`)
     };
 
     const setup = (p5, canvasParentRef) => {
@@ -116,7 +124,7 @@ export default function PlaneSketch({ questions }) {
             }
         }
 
-        if (countdownFinished) {
+        if (countdownFinished && plane) {
             let currQuestion = questions[questionsDone];
 
             if (questionsDone * totalTime + 3000 <= time && time <= (questionsDone + 1) * totalTime + 3000) {
@@ -133,7 +141,7 @@ export default function PlaneSketch({ questions }) {
                 if (questionsDone * totalTime + 3000 + (flyInTime) <= time &&
                     time <= questionsDone * totalTime + 3000 + (flyInTime + answerTime)) {
                     let lerpAmt = (time - (questionsDone * totalTime + 3000 + flyInTime)) / (blastTime);
-                    blastRadius = p5.lerp(0, 20, lerpAmt)
+                    blastRadius = p5.lerp(0, 10, lerpAmt)
                 }
 
                 // blast beam + show colors
@@ -145,6 +153,10 @@ export default function PlaneSketch({ questions }) {
                                 (planeX + (plane.width / 2) - enemyOffset) / enemyX
                             )
                         )
+                        if (chosenAnswers[chosenAnswers.length - 1] == currQuestion.correct) {
+                            points += 100;
+                            // console.log(points)
+                        }
                     }
                     p5.image(explosion, enemyX * chosenAnswers[questionsDone] + enemyOffset, enemyY)
                     p5.rect(planeX + (plane.width / 2) - 5, 0, 10, p5.height - (plane.height / 2))
@@ -168,7 +180,7 @@ export default function PlaneSketch({ questions }) {
                     blastRadius = 0;
 
                     let lerpAmt = (time - (questionsDone * totalTime + 3000 + (flyInTime + answerTime + blastTime))) / (flyOutTime);
-                    enemyY = p5.lerp(100, p5.height, lerpAmt)
+                    enemyY = p5.lerp(100, p5.height + enemyHeight, lerpAmt)
                 }
 
                 p5.text(currQuestion.question, enemyOffset, enemyY - 20)
@@ -178,7 +190,7 @@ export default function PlaneSketch({ questions }) {
                         p5.fill(enemyColors[i])
                         p5.rect(enemyX * i + enemyOffset, enemyY, enemyWidth, enemyHeight, 10)
                         p5.fill(0)
-                        p5.text(choice, enemyX * i + enemyOffset, enemyY + enemyHeight / 2)
+                        p5.text(choice, enemyX * i + enemyOffset + 20, enemyY + (enemyHeight / 2) + 10)
                         p5.fill(255);
                     }
                 })
@@ -193,6 +205,8 @@ export default function PlaneSketch({ questions }) {
                         calculate points to add
                         post to firestore
                     */
+                    handleFinish(points)
+                    p5.noLoop()
                 }
             }
         }
