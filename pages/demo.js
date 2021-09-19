@@ -3,25 +3,25 @@ import Footer from '../components/footer'
 
 import PlaneSketch from '../sketches/planeSketch';
 
-function Demo({ }) {
+function Demo({ questions }) {
 
-    let questions = [
-        {
-            question: "Color of the sky?",
-            choices: ["yellow", "blue", "red", "green"],
-            correct: 1
-        },
-        {
-            question: "Color of the sky?",
-            choices: ["yellow", "blue", "red", "green"],
-            correct: 1
-        },
-        {
-            question: "Color of the sky?",
-            choices: ["yellow", "blue", "red", "green"],
-            correct: 1
-        }
-    ]
+    // let questions = [
+    //     {
+    //         question: "Color of the sky?",
+    //         choices: ["yellow", "blue", "red", "green"],
+    //         correct: 1
+    //     },
+    //     {
+    //         question: "Color of the sky?",
+    //         choices: ["yellow", "blue", "red", "green"],
+    //         correct: 1
+    //     },
+    //     {
+    //         question: "Color of the sky?",
+    //         choices: ["yellow", "blue", "red", "green"],
+    //         correct: 1
+    //     }
+    // ]
 
     return (
         <div style={{ overflowX: "hidden" }}>
@@ -79,14 +79,14 @@ async function postData(url = '', data = {}) {
 }
 
 
-// Demo.getInitialProps = async (ctx) => {
-//     const dev = process.env.NODE_ENV !== 'production';
-//     const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
+Demo.getInitialProps = async (ctx) => {
+    const dev = process.env.NODE_ENV !== 'production';
+    const server = dev ? 'http://localhost:3000' : 'https://your_deployment.server.com';
 
-//     const res = await fetch(`${server}/api/db/get-set/ycmo92wzr`)
-//     const json = await res.json()
-//     // console.log(json)
-//     return { questions: json }
-// }
+    const res = await fetch(`${server}/api/db/get-set/ycmo92wzr`)
+    const json = await res.json()
+    // console.log(json)
+    return { questions: json }
+}
 
 export default Demo

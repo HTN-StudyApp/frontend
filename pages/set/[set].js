@@ -26,4 +26,4 @@ Set.getInitialProps = async (ctx) => {
     return { questions: json }
 }
 
-export default Demo
+export default Set

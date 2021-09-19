@@ -58,6 +58,19 @@ export default async (req, res) => {
                 console.log(publicRes)
             }
 
+            /* 
+                Users {
+                    email {
+                        points, 
+                        setsOwned
+                    }
+                }
+            */
+            const userRes = await db.collection('Users').doc(email).set({
+                setsOwned: admin.firestore.FieldValue.arrayUnion(id),
+            }, { merge: true })
+            console.log(userRes)
+
             // Process a POST request
             res.status(200).json({ "msg": `congrats i set the id as ${id}`, id });
             return;
