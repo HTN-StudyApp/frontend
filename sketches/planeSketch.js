@@ -18,6 +18,7 @@ export default function PlaneSketch({ questions, onFinish }) {
     let questionsDone = 0;
     let chosenAnswers = [];
     let points = 0;
+    let currQuestion;
 
     let time = 0;
 
@@ -25,6 +26,8 @@ export default function PlaneSketch({ questions, onFinish }) {
 
     let planeX;
     let planeY;
+    let planeWidth;
+    let planeHeight;
     let deltaX = 5;
     let blastRadius = 0;
 
@@ -40,10 +43,16 @@ export default function PlaneSketch({ questions, onFinish }) {
     let flyOutTime = 2000;
     let totalTime = flyInTime + answerTime + blastTime + flyOutTime;
 
+    let lerpAmt;
+
     let size = useWindowSize();
+
+    let windowWidth = size.width;
+    let windowHeight = size.height;
+
     let countdownFinished = false;
-    let midX = size.width / 2
-    let midY = size.height / 2
+    let midX = windowWidth / 2
+    let midY = windowHeight / 2
 
     let enemyX;
     let enemyY = 0;
@@ -54,23 +63,27 @@ export default function PlaneSketch({ questions, onFinish }) {
     let enemyColors;
 
     let plane;
-    let explosion
+    let explosion;
     const preload = (p5) => {
         plane = p5.loadImage(`${server}/assets/plane.png`)
         explosion = p5.loadImage(`${server}/assets/explosion.png`)
     };
 
+
     const setup = (p5, canvasParentRef) => {
         // use parent to render the canvas in this ref
         // (without that p5 will render the canvas outside of your component)
-        p5.createCanvas(size.width, size.height - 50).parent(canvasParentRef);
+        p5.createCanvas(windowWidth, windowHeight - 50).parent(canvasParentRef);
         p5.ellipseMode(p5.RADIUS)
 
-        if (plane) plane.resize(100, 100)
-        if (explosion) explosion.resize(enemyWidth, enemyHeight)
+        plane.resize(100, 100)
+        explosion.resize(enemyWidth, enemyHeight)
 
-        planeX = (p5.width - plane.width) / 2;
-        planeY = p5.height - plane.height;
+        planeWidth = (plane?.width ?? 0);
+        planeHeight = (plane?.height ?? 0);
+
+        planeX = (p5.width - planeWidth) / 2;
+        planeY = p5.height - planeHeight;
 
         class Star {
             constructor() {
@@ -82,13 +95,13 @@ export default function PlaneSketch({ questions, onFinish }) {
 
             draw() {
                 this.t += 0.1;
-                var scale = this.size + Math.sin(this.t) * 2;
+                let scale = this.size + Math.sin(this.t) * 2;
                 p5.noStroke();
                 p5.ellipse(this.x, this.y, scale, scale);
             }
         }
 
-        for (var i = 0; i < 20; i++) {
+        for (let i = 0; i < 20; i++) {
             stars[i] = new Star();
         }
     };
@@ -103,7 +116,6 @@ export default function PlaneSketch({ questions, onFinish }) {
 
         p5.fill(255);
 
-        stars.forEach(star => star.draw())
 
         // in milliseconds
         time += p5.deltaTime;
@@ -124,11 +136,11 @@ export default function PlaneSketch({ questions, onFinish }) {
             }
         }
 
-        if (countdownFinished && plane) {
-            let currQuestion = questions[questionsDone];
+        if (countdownFinished && plane && planeWidth && planeHeight) {
+            currQuestion = questions[questionsDone];
 
             if (questionsDone * totalTime + 3000 <= time && time <= (questionsDone + 1) * totalTime + 3000) {
-                enemyX = size.width / (currQuestion.choices.length + 1);
+                enemyX = windowWidth / (currQuestion.choices.length + 1);
                 enemyOffset = enemyX / 2;
 
                 // let enemies fly in
@@ -140,7 +152,7 @@ export default function PlaneSketch({ questions, onFinish }) {
                 // let user think
                 if (questionsDone * totalTime + 3000 + (flyInTime) <= time &&
                     time <= questionsDone * totalTime + 3000 + (flyInTime + answerTime)) {
-                    let lerpAmt = (time - (questionsDone * totalTime + 3000 + flyInTime)) / (blastTime);
+                    lerpAmt = (time - (questionsDone * totalTime + 3000 + flyInTime)) / (blastTime);
                     blastRadius = p5.lerp(0, 10, lerpAmt)
                 }
 
@@ -150,7 +162,7 @@ export default function PlaneSketch({ questions, onFinish }) {
                     if (chosenAnswers.length != questionsDone + 1) {
                         chosenAnswers.push(
                             Math.floor(
-                                (planeX + (plane.width / 2) - enemyOffset) / enemyX
+                                (planeX + (planeWidth / 2) - enemyOffset) / enemyX
                             )
                         )
                         if (chosenAnswers[chosenAnswers.length - 1] == currQuestion.correct) {
@@ -159,8 +171,8 @@ export default function PlaneSketch({ questions, onFinish }) {
                         }
                     }
                     p5.image(explosion, enemyX * chosenAnswers[questionsDone] + enemyOffset, enemyY)
-                    p5.rect(planeX + (plane.width / 2) - 5, 0, 10, p5.height - (plane.height / 2))
-                    let lerpAmt = (time - (questionsDone * totalTime + 3000 + (flyInTime + answerTime))) / (blastTime);
+                    p5.rect(planeX + (planeWidth / 2) - 5, 0, 10, p5.height - (plane.height / 2))
+                    lerpAmt = (time - (questionsDone * totalTime + 3000 + (flyInTime + answerTime))) / (blastTime);
                     for (let i = 0; i < enemyColors.length; i++) {
                         if (i == currQuestion.correct) {
                             enemyColors[i] = p5.lerpColor(
@@ -179,7 +191,7 @@ export default function PlaneSketch({ questions, onFinish }) {
                     time <= (questionsDone + 1) * totalTime + 3000) {
                     blastRadius = 0;
 
-                    let lerpAmt = (time - (questionsDone * totalTime + 3000 + (flyInTime + answerTime + blastTime))) / (flyOutTime);
+                    lerpAmt = (time - (questionsDone * totalTime + 3000 + (flyInTime + answerTime + blastTime))) / (flyOutTime);
                     enemyY = p5.lerp(100, p5.height + enemyHeight, lerpAmt)
                 }
 
@@ -197,7 +209,6 @@ export default function PlaneSketch({ questions, onFinish }) {
             } else {
                 questionsDone += 1
                 if (questionsDone == questions.length) {
-                    questionsDone = questions.length - 1;
 
                     // game ended
                     // console.log(chosenAnswers)
@@ -211,8 +222,14 @@ export default function PlaneSketch({ questions, onFinish }) {
             }
         }
 
-        p5.ellipse(planeX + (plane.width / 2), planeY, blastRadius, blastRadius);
-        p5.image(plane, planeX, planeY);
+        stars.forEach(star => {
+            star.draw();
+            // console.log('draw9jg')
+        })
+        // if (planeWidth && planeHeight) {
+            p5.ellipse(planeX + (planeWidth / 2), planeY, blastRadius, blastRadius);
+            p5.image(plane, planeX, planeY);
+        // }
 
         if (p5.keyIsDown(p5.LEFT_ARROW)) {
             planeX -= deltaX;
