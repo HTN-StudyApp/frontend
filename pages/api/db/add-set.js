@@ -1,6 +1,6 @@
-import { db } from '../../../../lib/firebaseAdmin';
+import { db } from '../../../lib/firebaseAdmin';
 
-// website.com/set/abcde1234
+// website.com/db/set
 
 export default async (req, res) => {
     try {
