@@ -1,4 +1,4 @@
-import { db } from '../../../lib/firebaseAdmin';
+import { db, admin } from '../../../lib/firebaseAdmin';
 
 // website.com/db/set
 
@@ -12,6 +12,7 @@ export default async (req, res) => {
                 body {
                     email,
                     name,
+                    publicSet,
                     questions: [
                         {
                             question,
@@ -23,6 +24,7 @@ export default async (req, res) => {
             */
             let email = req.body.email
             let name = req.body.name;
+            let publicSet = req.body.publicSet;
             let id = generateUniqueID(email)
             let questions = req.body.questions
 
@@ -30,18 +32,31 @@ export default async (req, res) => {
 
             /* 
                 Sets {
+                    public {
+                        public: true,
+                        sets: [string]
+                    }
                     id {
                         id, 
                         name,
                         email, 
+                        public,
                         questions [
                             { question, choices[], correct }
                         ]
                     }
                 }
             */
-            const dbRes = await db.collection('Sets').doc(id).set({ id, name, email, questions });
+            const dbRes = await db.collection('Sets').doc(id).set({ id, name, publicSet, email, questions });
             console.log(dbRes)
+
+            if (publicSet) {
+                const publicRes = await db.collection('Sets').doc('public').update({ 
+                    publicSets: admin.firestore.FieldValue.arrayUnion(id),
+                    public: true
+                });
+                console.log(publicRes)
+            }
 
             // Process a POST request
             res.status(200).json({ "msg": `congrats i set the id as ${id}`, id });

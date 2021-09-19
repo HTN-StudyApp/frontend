@@ -189,6 +189,10 @@ export default function PlaneSketch({ questions }) {
 
                     // game ended
                     // console.log(chosenAnswers)
+                    /* 
+                        calculate points to add
+                        post to firestore
+                    */
                 }
             }
         }
