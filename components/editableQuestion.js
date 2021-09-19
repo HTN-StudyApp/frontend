@@ -34,7 +34,7 @@ export default function EditableQuestion({ index }) {
   return (
     <div className="flex flex-col items-center justify-center w-full mb-10">
       <div
-        className="w-3/5 h-[36rem] relative group"
+        className="w-3/4 h-[36rem] relative group"
         style={{ perspective: "400rem" }}
       >
         <div
@@ -86,7 +86,7 @@ export default function EditableQuestion({ index }) {
               }
             >
               {choices.map((choice, idx) => (
-                <div className={"flex items-center"}>
+                <div key={idx} className={"flex items-center"}>
                   <span>{String.fromCharCode("A".charCodeAt(0) + idx)}. </span>
                   <input
                     autoFocus

@@ -10,7 +10,7 @@ export default function Header({ isMobile, userid }) {
       style={{
         height: isMobile ? "fit-content" : "60px",
       }}
-      className="bg-indigo-900 w-full absolute top-0 text-white flex items-center justify-between"
+      className="z-10 bg-indigo-900 w-full absolute top-0 text-white flex items-center justify-between"
     >
       {/* logo */}
       <div className="flex items-center px-2">

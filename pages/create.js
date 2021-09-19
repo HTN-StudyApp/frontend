@@ -12,7 +12,8 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function Create() {
   let [setName, setSetName] = useState("Untitled Set");
-  let [questions, setQuestions] = useState(1);
+  const [questionNum, setQuestionNum] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(1);
 
   return (
     <div className={"bg-gray-100"}>
@@ -35,9 +36,39 @@ export default function Create() {
           className="bg-transparent outline-none border-0 focus:ring-0 focus:outline-none text-5xl w-3/4"
         ></input>
 
-        {new Array(questions).fill(0).map((x, i) => (
-          <EditableQuestion key={`${i} ${questions}`} index={i} />
-        ))}
+        <div className={"w-full flex items-center px-28"}>
+          {questionNum > 0 && (
+            <button
+              className={"w-10 h-10 shadow-md rounded-full bg-white"}
+              onClick={() => {
+                setQuestionNum(questionNum - 1);
+              }}
+            >
+              &larr;
+            </button>
+          )}
+          <EditableQuestion key={questionNum} index={questionNum} />
+          {questionNum < totalQuestions - 1 ? (
+            <button
+              className={"w-10 h-10 shadow-md rounded-full bg-white"}
+              onClick={() => {
+                setQuestionNum(questionNum + 1);
+              }}
+            >
+              &rarr;
+            </button>
+          ) : (
+            <button
+              className={"w-10 h-10 shadow-md rounded-full bg-white"}
+              onClick={() => {
+                setTotalQuestions(totalQuestions + 1);
+                setQuestionNum(questionNum + 1);
+              }}
+            >
+              +
+            </button>
+          )}
+        </div>
       </main>
 
       <Footer />
