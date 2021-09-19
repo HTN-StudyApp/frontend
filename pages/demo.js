@@ -3,7 +3,7 @@ import Footer from '../components/footer'
 
 import PlaneSketch from '../sketches/planeSketch';
 
-function Demo({ questions }) {
+function Demo({ setData }) {
 
     // let questions = [
     //     {
@@ -27,7 +27,7 @@ function Demo({ questions }) {
         <div style={{ overflowX: "hidden" }}>
             <Header />
             <main style={{ marginTop: "60px", minHeight: "90vh" }}>
-                <button onClick={() => {
+                {/* <button onClick={() => {
 
                     postData('http://localhost:3000/api/db/add-set', {
                         email: "ongzz@gmail.com", name: "Mock Set", publicSet: true, questions: [
@@ -51,8 +51,8 @@ function Demo({ questions }) {
                         .then(data => {
                             console.log(data); // JSON data parsed by `data.json()` call
                         });
-                }}>test set</button>
-                <PlaneSketch questions={questions} />
+                }}>test add set</button> */}
+                <PlaneSketch questions={setData.questions} />
             </main>
             <Footer />
         </div>
@@ -85,8 +85,8 @@ Demo.getInitialProps = async (ctx) => {
 
     const res = await fetch(`${server}/api/db/get-set/ycmo92wzr`)
     const json = await res.json()
-    // console.log(json)
-    return { questions: json }
+    console.log(json)
+    return { setData: json }
 }
 
 export default Demo
