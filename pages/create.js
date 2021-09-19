@@ -4,16 +4,15 @@ import Image from "next/image";
 import Header from "../components/header";
 import Footer from "../components/footer";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import EditableQuestion from "../components/editableQuestion";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-
 export default function Create() {
   let [setName, setSetName] = useState("Untitled Set");
   const [questionNum, setQuestionNum] = useState(0);
-  const [totalQuestions, setTotalQuestions] = useState(1);
+  const [questions, setQuestions] = useState(["Question here..."]);
+  const [answers, setAnswers] = useState([
+    [{ answer: "answer 1", correct: false }],
+  ]);
 
   return (
     <div className={"bg-gray-100"}>
@@ -34,7 +33,7 @@ export default function Create() {
           value={setName}
           onChange={(e) => setSetName(e.currentTarget.value)}
           className="bg-transparent outline-none border-0 focus:ring-0 focus:outline-none text-5xl w-3/4"
-        ></input>
+        />
 
         <div className={"w-full flex items-center px-28"}>
           {questionNum > 0 && (
@@ -47,8 +46,29 @@ export default function Create() {
               &larr;
             </button>
           )}
-          <EditableQuestion key={questionNum} index={questionNum} />
-          {questionNum < totalQuestions - 1 ? (
+          <EditableQuestion
+            question={questions[questionNum]}
+            setQuestion={(newq) => {
+              questions[questionNum] = newq;
+              setQuestions([...questions]);
+            }}
+            answers={answers[questionNum]}
+            setAnswers={(newa) => {
+              answers[questionNum] = newa;
+              setAnswers([...answers]);
+            }}
+            key={questionNum}
+            index={questionNum}
+            deleteQuestion={() => {
+              questions.splice(questionNum, 1);
+              setQuestions([...questions]);
+              answers.splice(questionNum, 1);
+              setAnswers([...answers]);
+              setQuestionNum(questionNum === 0 ? 0 : questionNum - 1);
+            }}
+            canDelete={questions.length > 1}
+          />
+          {questionNum < questions.length - 1 ? (
             <button
               className={"w-10 h-10 shadow-md rounded-full bg-white"}
               onClick={() => {
@@ -61,8 +81,9 @@ export default function Create() {
             <button
               className={"w-10 h-10 shadow-md rounded-full bg-white"}
               onClick={() => {
-                setTotalQuestions(totalQuestions + 1);
                 setQuestionNum(questionNum + 1);
+                setQuestions([...questions, ""]);
+                setAnswers([...answers, [{ answer: "", correct: false }]]);
               }}
             >
               +
