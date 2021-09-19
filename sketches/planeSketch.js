@@ -66,8 +66,8 @@ export default function PlaneSketch({ questions, onFinish }) {
         p5.createCanvas(size.width, size.height - 50).parent(canvasParentRef);
         p5.ellipseMode(p5.RADIUS)
 
-        plane.resize(100, 100)
-        explosion.resize(enemyWidth, enemyHeight)
+        if (plane) plane.resize(100, 100)
+        if (explosion) explosion.resize(enemyWidth, enemyHeight)
 
         planeX = (p5.width - plane.width) / 2;
         planeY = p5.height - plane.height;
