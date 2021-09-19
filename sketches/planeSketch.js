@@ -8,16 +8,16 @@ const Sketch = dynamic(import('react-p5'), {
 });
 
 export default function PlaneSketch({ questions }) {
-    let questionsLeft = questions;
     let questionsDone = 0;
-
     let chosenAnswers = [];
+
+    let time = 0;
+
+    let stars = [];
 
     let planeX;
     let planeY;
     let deltaX = 5;
-    let time = 0;
-
     let blastRadius = 0;
 
     /* 
@@ -63,6 +63,26 @@ export default function PlaneSketch({ questions }) {
 
         planeX = (p5.width - plane.width) / 2;
         planeY = p5.height - plane.height;
+
+        class Star {
+            constructor() {
+                this.x = p5.random(p5.width);
+                this.y = p5.random(p5.height);
+                this.size = p5.random(0.25, 1);
+                this.t = p5.random(p5.TAU);
+            }
+
+            draw() {
+                this.t += 0.1;
+                var scale = this.size + Math.sin(this.t) * 2;
+                p5.noStroke();
+                p5.ellipse(this.x, this.y, scale, scale);
+            }
+        }
+
+        for (var i = 0; i < 20; i++) {
+            stars[i] = new Star();
+        }
     };
 
 
@@ -75,8 +95,11 @@ export default function PlaneSketch({ questions }) {
 
         p5.fill(255);
 
+        stars.forEach(star => star.draw())
+
         // in milliseconds
         time += p5.deltaTime;
+
         if (!countdownFinished) {
             p5.textSize(50)
             if (time <= 1000) {
@@ -92,36 +115,30 @@ export default function PlaneSketch({ questions }) {
                 countdownFinished = true;
             }
         }
-        if (questionsLeft.length > 0 && countdownFinished) {
-            let currQuestion = questionsLeft[questionsDone];
 
-            if (questionsDone * totalTime + 3000 <= time &&
-                time <= (questionsDone + 1) * totalTime + 3000
-            ) {
+        if (countdownFinished) {
+            let currQuestion = questions[questionsDone];
+
+            if (questionsDone * totalTime + 3000 <= time && time <= (questionsDone + 1) * totalTime + 3000) {
                 enemyX = size.width / (currQuestion.choices.length + 1);
                 enemyOffset = enemyX / 2;
 
-                // console.log(enemyColors)
                 // let enemies fly in
-                if (questionsDone * totalTime + 3000 <= time &&
-                    time <= questionsDone * totalTime + 3000 + flyInTime
-                ) {
+                if (questionsDone * totalTime + 3000 <= time && time <= questionsDone * totalTime + 3000 + flyInTime) {
                     enemyColors = [...Array(currQuestion.choices.length)].map((_, i) => p5.color(255, 255, 255))
                     enemyY = p5.lerp(0, 100, (time - (questionsDone * totalTime + 3000)) / flyInTime)
                 }
 
                 // let user think
                 if (questionsDone * totalTime + 3000 + (flyInTime) <= time &&
-                    time <= questionsDone * totalTime + 3000 + (flyInTime + answerTime)
-                ) {
+                    time <= questionsDone * totalTime + 3000 + (flyInTime + answerTime)) {
                     let lerpAmt = (time - (questionsDone * totalTime + 3000 + flyInTime)) / (blastTime);
                     blastRadius = p5.lerp(0, 20, lerpAmt)
                 }
 
                 // blast beam + show colors
                 if (questionsDone * totalTime + 3000 + (flyInTime + answerTime) <= time &&
-                    time <= questionsDone * totalTime + 3000 + (flyInTime + answerTime + blastTime)
-                ) {
+                    time <= questionsDone * totalTime + 3000 + (flyInTime + answerTime + blastTime)) {
                     if (chosenAnswers.length != questionsDone + 1) {
                         chosenAnswers.push(
                             Math.floor(
@@ -147,8 +164,7 @@ export default function PlaneSketch({ questions }) {
 
                 // fly past
                 if (questionsDone * totalTime + 3000 + (flyInTime + answerTime + blastTime) <= time &&
-                    time <= (questionsDone + 1) * totalTime + 3000
-                ) {
+                    time <= (questionsDone + 1) * totalTime + 3000) {
                     blastRadius = 0;
 
                     let lerpAmt = (time - (questionsDone * totalTime + 3000 + (flyInTime + answerTime + blastTime))) / (flyOutTime);
@@ -165,11 +181,15 @@ export default function PlaneSketch({ questions }) {
                         p5.text(choice, enemyX * i + enemyOffset, enemyY + enemyHeight / 2)
                         p5.fill(255);
                     }
-
                 })
-                // p5.rect()
-                // show the divs
-                // add 1 to the questions
+            } else {
+                questionsDone += 1
+                if (questionsDone == questions.length) {
+                    questionsDone = questions.length - 1;
+
+                    // game ended
+                    // console.log(chosenAnswers)
+                }
             }
         }
 
@@ -185,3 +205,5 @@ export default function PlaneSketch({ questions }) {
 
     return (<Sketch preload={preload} setup={setup} draw={draw} />);
 };
+
+
