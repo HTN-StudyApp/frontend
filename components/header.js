@@ -2,9 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 import logo from "../public/logo.png";
-import user from "../public/user.png";
+import pfp from "../public/user.png";
+import useUser from "../lib/useUser";
 
 export default function Header({ isMobile, userid }) {
+  const { user, loading, signInWithGoogle, logout } = useUser();
   return (
     <nav
       style={{
@@ -27,15 +29,25 @@ export default function Header({ isMobile, userid }) {
       </div>
 
       {/* user profile picture */}
-      <div className="px-2">
-        <Image
-          src={user}
-          alt="Profile Picture"
-          width={45}
-          height={45}
-          className="rounded-full"
-        />
-      </div>
+      {!loading &&
+        (user ? (
+          <div className="px-2 flex items-center">
+            <Image
+              src={user.photoURL}
+              alt="Profile Picture"
+              width={45}
+              height={45}
+              className="rounded-full"
+            />
+            <button className={"px-2"} onClick={() => logout()}>
+              Sign Out
+            </button>
+          </div>
+        ) : (
+          <button className={"px-2"} onClick={() => signInWithGoogle()}>
+            Sign In
+          </button>
+        ))}
     </nav>
   );
 }

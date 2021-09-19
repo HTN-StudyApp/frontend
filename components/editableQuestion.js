@@ -13,22 +13,26 @@ import { useState, useEffect } from "react";
 
 import user from "../public/user.png";
 
-export default function EditableQuestion({ index }) {
-  let [question, setQuestion] = useState("Question here...");
+export default function EditableQuestion({
+  index,
+  question,
+  setQuestion,
+  answers,
+  setAnswers,
+  deleteQuestion,
+  canDelete,
+}) {
   // let [choices, setChoices] = useState(["Answer...", "Answer...", "Answer...", "Answer..."])
-  let [choices, setChoices] = useState([
-    { answer: "answer choice 1", correct: false },
-  ]);
   const [editAnswer, setEditAnswer] = useState(false);
 
   const setAnswer = (choice, idx) => {
-    choices[idx] = choice;
-    setChoices([...choices]);
+    answers[idx] = choice;
+    setAnswers([...answers]);
   };
 
   const deleteAnswer = (idx) => {
-    choices.splice(idx, 1);
-    setChoices([...choices]);
+    answers.splice(idx, 1);
+    setAnswers([...answers]);
   };
 
   return (
@@ -44,8 +48,18 @@ export default function EditableQuestion({ index }) {
           style={{ backfaceVisibility: "hidden" }}
         >
           <div className={"flex justify-between items-end"}>
-            <h2 className={"text-2xl mt-6"}>Question {index + 1}</h2>
-            <button onClick={() => setEditAnswer(true)}>Edit answer</button>
+            <div className={"flex items-baseline gap-4"}>
+              <h2 className={"text-2xl mt-6"}>Question {index + 1}</h2>
+              {canDelete && (
+                <button onClick={() => deleteQuestion()}>
+                  <FontAwesomeIcon
+                    icon={faTrashAlt}
+                    className={"w-4 h-4 text-gray-500 hover:text-red-500"}
+                  />
+                </button>
+              )}
+            </div>
+            <button onClick={() => setEditAnswer(true)}>Edit answers</button>
           </div>
           <div
             className={
@@ -72,7 +86,17 @@ export default function EditableQuestion({ index }) {
           style={{ backfaceVisibility: "hidden" }}
         >
           <div className={"flex justify-between items-end"}>
-            <h2 className={"text-2xl mt-6"}>Answer {index + 1}</h2>
+            <div className={"flex items-baseline gap-4"}>
+              <h2 className={"text-2xl mt-6"}>Answer {index + 1}</h2>
+              {canDelete && (
+                <button onClick={() => deleteQuestion()}>
+                  <FontAwesomeIcon
+                    icon={faTrashAlt}
+                    className={"w-4 h-4 text-gray-500 hover:text-red-500"}
+                  />
+                </button>
+              )}
+            </div>
             <button onClick={() => setEditAnswer(false)}>Edit question</button>
           </div>
           <div
@@ -85,16 +109,16 @@ export default function EditableQuestion({ index }) {
                 "px-16 py-16 text-2xl w-full flex flex-col justify-center"
               }
             >
-              {choices.map((choice, idx) => (
+              {answers.map((answer, idx) => (
                 <div key={idx} className={"flex items-center"}>
                   <span>{String.fromCharCode("A".charCodeAt(0) + idx)}. </span>
                   <input
                     autoFocus
                     type="text"
-                    value={choice.answer}
+                    value={answer.answer}
                     onChange={(e) => {
                       setAnswer(
-                        { answer: e.target.value, correct: choice.correct },
+                        { answer: e.target.value, correct: answer.correct },
                         idx
                       );
                     }}
@@ -103,18 +127,18 @@ export default function EditableQuestion({ index }) {
                   <button
                     className={
                       "text-base px-2 rounded-md " +
-                      (choice.correct
+                      (answer.correct
                         ? "text-green-500 bg-green-100 hover:bg-green-200"
                         : "text-red-500 bg-red-100 hover:bg-red-200")
                     }
                     onClick={() => {
                       setAnswer(
-                        { answer: choice.answer, correct: !choice.correct },
+                        { answer: answer.answer, correct: !answer.correct },
                         idx
                       );
                     }}
                   >
-                    {choice.correct ? "Correct" : "Incorrect"}
+                    {answer.correct ? "Correct" : "Incorrect"}
                   </button>
                   <button onClick={() => deleteAnswer(idx)}>
                     <FontAwesomeIcon
@@ -130,7 +154,7 @@ export default function EditableQuestion({ index }) {
             <button
               className={"absolute right-4 bottom-4"}
               onClick={() => {
-                setChoices([...choices, { answer: "", correct: false }]);
+                setAnswers([...answers, { answer: "", correct: false }]);
               }}
             >
               Add answer
