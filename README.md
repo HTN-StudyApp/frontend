@@ -3,7 +3,7 @@
 todos:
 - video
 - main page 
-    - add mock data
+    - add mock data (mayank)
 - add points after game finish
-- create new sets
 - dynamic set route
+- create new sets
